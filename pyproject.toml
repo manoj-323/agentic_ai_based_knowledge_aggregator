@@ -1,0 +1,23 @@
+[project]
+name = "agentic_ai_based_knowledge_aggregator"
+version = "0.1.0"
+description = "Agentic AI-Based Knowledge Aggregator using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.186.1,<1.0.0"
+]
+
+[project.scripts]
+agentic_ai_based_knowledge_aggregator = "agentic_ai_based_knowledge_aggregator.main:run"
+run_crew = "agentic_ai_based_knowledge_aggregator.main:run"
+train = "agentic_ai_based_knowledge_aggregator.main:train"
+replay = "agentic_ai_based_knowledge_aggregator.main:replay"
+test = "agentic_ai_based_knowledge_aggregator.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
