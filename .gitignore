@@ -2,3 +2,4 @@
 __pycache__/
 .DS_Store
 .git
+src/agentic_ai_based_knowledge_aggregator/keep.py
