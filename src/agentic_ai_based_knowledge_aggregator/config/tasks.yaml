@@ -4,16 +4,20 @@ initializer_task:
     Think logically about {_field} and find its granular building blocks.
     Right now you are asked "{_input}" based on this what would you suggest the user to search online.
   expected_output: >
-    Just a simple list of 5 web search topics about {_input}, with nothing else
-    No need to number the questions
+    Just a simple json list of 5 web search topics about {_input}, with nothing else
+    json structure: '{"questions" : ["ques_1", "ques_2", "ques_3", "ques_4", "ques_5"]}'
   agent: initializer
-  output_file: report.md
-
   prompt_examples:
     input: Teach me python.
-    output: |
-      - What is python.
-      - How is python different from other languages.
-      - What are basic constituents of python.
-      - Simple programs with explanation in python.
-      - Must know about python.
+    output: '{"questions" : ["What is python", "How is python different from other languages", "What are basic constituents of python", "Simple programs with explanation in python", "Must know about python"]}'
+
+
+search_agent_task:
+  description: >
+    You will receive the ouput from previous agent which generated a json list of questions that need to be queried online.
+    Use the tool provided to query the internet.
+  expected_output: >
+    Chunks of well written information, without any duplication
+  agent: search_agent
+  output_file: report.md
+  context: [initializer_task]

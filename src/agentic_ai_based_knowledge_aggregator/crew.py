@@ -3,6 +3,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 
+from crewai_tools import SerperDevTool
+
 import os
 from dotenv import load_dotenv
 
@@ -35,11 +37,35 @@ class AgenticAiBasedKnowledgeAggregator():
             llm=llm
         )
 
+    @agent
+    def search_agent(self) -> Agent:
+        """Search web about the topic list from initializer,
+           and store summarized (by llm) data in a txt file
+           (citations if possible)
+        
+        Tools:
+            Vector db tool: if user has provided any pdf, txt, json or anything make a vector db of that for reference
+
+        Returns:
+            Agent: crew agent
+        """
+        return Agent(
+            config=self.agents_config['search_agent'],
+            verbose=True,
+            llm=llm,
+            tools=[SerperDevTool()]
+        )
+
     @task
     def initializer_task(self) -> Task:
-        pass
         return Task(
             config=self.tasks_config['initializer_task']
+        )
+    
+    @task
+    def search_agent_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['search_agent_task']
         )
 
     @crew
@@ -47,8 +73,6 @@ class AgenticAiBasedKnowledgeAggregator():
         """Creates the AgenticAiBasedKnowledgeAggregator crew"""
 
         return Crew(
-            # agents=[self.initializer],
-            # tasks=[self.initializer_task],
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,

@@ -21,12 +21,14 @@ def run(inp, _field):
         '_input': inp,
         '_field': _field,
     }
-    
+
+    result = None
     try:
-        AgenticAiBasedKnowledgeAggregator().crew().kickoff(inputs=inputs)
+        result = AgenticAiBasedKnowledgeAggregator().crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
+    print(result)
 
 
 inp = "help me pick my first bike"
