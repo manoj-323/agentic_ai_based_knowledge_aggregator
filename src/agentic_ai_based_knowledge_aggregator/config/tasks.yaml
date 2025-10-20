@@ -4,20 +4,32 @@ initializer_task:
     Think logically about {_field} and find its granular building blocks.
     Right now you are asked "{_input}" based on this what would you suggest the user to search online.
   expected_output: >
-    Just a simple json list of 5 web search topics about {_input}, with nothing else
-    json structure: '{"questions" : ["ques_1", "ques_2", "ques_3", "ques_4", "ques_5"]}'
+    Just a simple json list of 1 web search topics about {_input}, with nothing else
+    only ouput one question
+    json structure: '{"questions" : ["ques_1"]}'
   agent: initializer
   prompt_examples:
     input: Teach me python.
-    output: '{"questions" : ["What is python", "How is python different from other languages", "What are basic constituents of python", "Simple programs with explanation in python", "Must know about python"]}'
+    output: '{"question" : ["What is python"]}'
 
 
 search_agent_task:
   description: >
     You will receive the ouput from previous agent which generated a json list of questions that need to be queried online.
-    Use the tool provided to query the internet.
+    Use the serper_tool provided to query the internet and use user provided file through doument_knowledge_tool to extract important information from them as well.
   expected_output: >
-    Chunks of well written information, without any duplication
+    Chunks of well written information
   agent: search_agent
-  output_file: report.md
   context: [initializer_task]
+
+
+reviewer_agent_task:
+  description: >
+    Your will receive information about the field {_field} and for the user question {_input}, your role is to review 
+    this information and raise any flags that you may find in it, maybe raise concern about something that might be dangerous
+  expected_output: >
+    Write a well written report from this information with proper start, different main topics, subtopics if any
+    then finally a conclusion and your opinion on it
+  agent: reviewer_agent
+  output_file: report.md
+  context: [search_agent_task]

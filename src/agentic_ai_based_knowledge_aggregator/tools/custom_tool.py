@@ -17,3 +17,18 @@ class MyCustomTool(BaseTool):
     def _run(self, argument: str) -> str:
         # Implementation goes here
         return "this is an example of a tool output, ignore it and move along."
+
+
+class web_search_tool_input(BaseModel):
+    """Input schema for web search of queries"""
+    argument: str = Field(..., description="The web search query.")
+
+class web_search_tool(BaseTool):
+    name: str = "custom_web_search_tool"
+    description: str = (
+        "This tool is used for searching the web for any query and it return the json response for that query."
+    )
+    args_schema: Type[BaseModel] = web_search_tool_input
+
+    def _run(self, argument: str) -> str:
+        pass
